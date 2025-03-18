@@ -80,4 +80,19 @@ class Dbhelper {
         await db.delete(TABLE_NAME, where: "$TODO_ID = $deleteindex");
     return roweffected > 0;
   }
+
+  //update todo complete status
+  Future<bool> updateStatus(
+      {required int updatedid, required int updateStatus}) async {
+    var db = await getdb();
+    int roweffected = await db.update(
+        TABLE_NAME, {"$TODO_ISCOMPLETED": updateStatus},
+        where: "$TODO_ID=$updatedid");
+    return roweffected > 0;
+    // db.update(
+    //     tableName,          // 1. Table name (WHERE the data is stored)
+    //     values,             // 2. Data to update (WHAT you want to change)
+    //     where: condition     // 3. Condition (WHERE to apply the change)
+    // );
+  }
 }

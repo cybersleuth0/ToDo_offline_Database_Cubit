@@ -29,4 +29,14 @@ class Todo_cubit extends Cubit<Todo_state> {
       emit(Todo_state(todos: todos));
     }
   }
+
+  void updateTodoStatus(
+      {required int whereupdateID, required bool updateStatus}) async {
+    bool check = await dbhelper.updateStatus(
+        updatedid: whereupdateID, updateStatus: updateStatus ? 1 : 0);
+    if (check) {
+      List<TodoModel> todos = await dbhelper.fetchtodo();
+      emit(Todo_state(todos: todos));
+    }
+  }
 }

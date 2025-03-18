@@ -93,11 +93,11 @@ class HomepageState extends State<Homepage> {
                         child: ListTile(
                           contentPadding: EdgeInsets.all(15),
                           leading: Checkbox(
-                            value: state.todos[index].isCompleted == true,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                eachTodo.isCompleted = value! ? true : false;
-                              });
+                            value: eachTodo.isCompleted,
+                            onChanged: (value) {
+                              context.read<Todo_cubit>().updateTodoStatus(
+                                  whereupdateID: eachTodo.id!,
+                                  updateStatus: value ?? false);
                             },
                           ),
                           title: Row(
@@ -107,10 +107,12 @@ class HomepageState extends State<Homepage> {
                                   eachTodo.title.toUpperCase(),
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      decoration: eachTodo.isCompleted
+                                          ? TextDecoration.lineThrough
+                                          : TextDecoration.none),
                                 ),
                               ),
                             ],
@@ -122,9 +124,11 @@ class HomepageState extends State<Homepage> {
                               Text(
                                 eachTodo.description,
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey[700],
-                                ),
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                    decoration: eachTodo.isCompleted
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none),
                               ),
                               SizedBox(height: 5),
                               Text(
@@ -133,6 +137,9 @@ class HomepageState extends State<Homepage> {
                                       int.parse(eachTodo.completetill ?? '0')),
                                 )}",
                                 style: TextStyle(
+                                  decoration: eachTodo.isCompleted
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
                                   fontSize: 15,
                                   color: Colors.blueGrey,
                                   fontStyle: FontStyle.italic,
@@ -141,10 +148,10 @@ class HomepageState extends State<Homepage> {
                             ],
                           ),
                           trailing: Icon(
-                            eachTodo.isCompleted == 1
+                            eachTodo.isCompleted
                                 ? Icons.check_circle
                                 : Icons.cancel,
-                            color: eachTodo.isCompleted == 1
+                            color: eachTodo.isCompleted
                                 ? Colors.green
                                 : Colors.red,
                             size: 28,
